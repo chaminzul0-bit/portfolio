@@ -29,7 +29,7 @@ const photoHTML = data.photo
 $("#aboutPhoto").innerHTML = photoHTML;
 $("#aboutPeek").innerHTML = data.photo
   ? `<img src="${esc(data.photo)}" alt="" />`
-  : `<span class="peek-word">about</span>`;
+  : `<span class="peek-tag">02</span><span class="peek-text">миний тухай</span>`;
 $("#aboutText").innerHTML = data.about.map((p) => `<p>${esc(p)}</p>`).join("");
 $("#facts").innerHTML = (data.facts || [])
   .map((f) => `<div><dt>${esc(f.label)}</dt><dd>${esc(f.value)}</dd></div>`)
@@ -39,9 +39,9 @@ $("#facts").innerHTML = (data.facts || [])
 $("#skillList").innerHTML = data.skills
   .map((s, i) => `<li class="stagger"><span>${String(i + 1).padStart(2, "0")}</span>${esc(s)}</li>`)
   .join("");
-$("#skillsPeek").innerHTML = `<div class="peek-list">${data.skills
-  .map((s) => `<span class="peek-word">${esc(s)}</span>`)
-  .join("")}</div>`;
+// Хаалттай үеийн зурвас: бүх ур чадвар нэг босоо мөрөнд, " · "-ээр тусгаарлана
+$("#skillsPeek").innerHTML =
+  `<span class="peek-tag">03</span><span class="peek-text">${data.skills.map(esc).join(" · ")}</span>`;
 
 // Бүтээлүүд
 $("#projectList").innerHTML = data.projects

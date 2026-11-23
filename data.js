@@ -28,7 +28,7 @@ window.PORTFOLIO = {
   ],
 
   // Ур чадварууд — "ур чадвар" хавтсанд дугаартай жагсаалтаар гарна
-  skills: ["HTML", "CSS", "JavaScript", "React", "Vite", "Tailwind CSS", "Supabase", "PostgreSQL", "Git · GitHub", "Vercel"],
+  skills: ["HTML", "CSS", "JavaScript", "React", "Vite", "Tailwind CSS", "Supabase", "SQL", "PostgreSQL", "Power BI", "Git · GitHub", "Vercel"],
 
   // Хамгийн багадаа 3 бүтээл. image: assets/ хавтас доторх зураг
   // demo хоосон бол "Сайт үзэх" товч харагдахгүй

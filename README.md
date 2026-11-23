@@ -1,9 +1,9 @@
 # Ягаан хавтас — Хувийн портфолио
 
-SWE334 · Бие даалт 2
+SWE334 · Бие даалт 2 · **Чаминзул** (Мэдээллийн систем, 4-р курс)
 
-🔗 Сайт: https://[your-site].vercel.app
-🔗 Код: https://github.com/[your-username]/portfolio
+🔗 Сайт: https://portfolio-olive-alpha-56.vercel.app
+🔗 Код: https://github.com/chaminzul0-bit/portfolio
 
 ## Бүтээлч санаа
 

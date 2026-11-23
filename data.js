@@ -27,33 +27,34 @@ window.PORTFOLIO = {
   ],
 
   // Ур чадварууд — "ур чадвар" хавтсанд дугаартай жагсаалтаар гарна
-  skills: ["HTML", "CSS", "JavaScript", "React", "Node.js", "SQL", "Git", "Figma"],
+  skills: ["HTML", "CSS", "JavaScript", "React", "Vite", "Tailwind CSS", "Supabase", "PostgreSQL", "Git · GitHub", "Vercel"],
 
   // Хамгийн багадаа 3 бүтээл. image: assets/ хавтас доторх зураг
+  // demo хоосон бол "Сайт үзэх" товч харагдахгүй
   projects: [
     {
-      title: "[Бүтээл 1] — Хичээлийн хуваарь",
-      desc: "Оюутнууд хичээлийн хуваариа чирж тавиад, давхцлыг автоматаар илрүүлдэг вэб апп.",
+      title: "ISM.NEXUS — Дижитал музей",
+      desc: "Мэдээллийн системийн тэнхимийн түүх, багш нар, арга хэмжээ, оюутны бүтээлийг нэг дор харуулах интерактив музей. Хайлт, шүүлт, зурагт цомог, оюутны бүтээлийн CRUD, админ самбартай. Бүтээлч шийдэл — он цагаар гулсуулж үздэг «ISM Time Machine».",
       image: "assets/project-1.svg",
-      tags: ["React", "LocalStorage"],
-      demo: "https://example.com",
-      code: "https://github.com/your-username/project-1"
+      tags: ["React", "Vite", "Supabase", "PostgreSQL", "RLS"],
+      demo: "https://ism-digital-museum-one.vercel.app",
+      code: "https://github.com/chaminzul0-bit/ism-digital-museum"
     },
     {
-      title: "[Бүтээл 2] — Номын сангийн систем",
-      desc: "Ном бүртгэх, зээлэх, буцаах үйлдэлтэй REST API болон админ самбар.",
+      title: "Kino — Кино үзэх сайт",
+      desc: "Кино хайж, дэлгэрэнгүй мэдээлэл үзэж, өөрийн жагсаалтад нэмдэг кино стриминг сайт. Хэрэглэгчийн бүртгэл, нэвтрэлт болон админ эрхээр кино удирдах боломжтой.",
       image: "assets/project-2.svg",
-      tags: ["Node.js", "Express", "MySQL"],
-      demo: "https://example.com",
-      code: "https://github.com/your-username/project-2"
+      tags: ["React", "Tailwind CSS", "React Router", "Supabase"],
+      demo: "",
+      code: "https://github.com/chaminzul0-bit/movie.site"
     },
     {
-      title: "[Бүтээл 3] — Цаг агаарын самбар",
-      desc: "Улаанбаатарын цаг агаар, агаарын чанарыг график хэлбэрээр харуулдаг жижиг самбар.",
+      title: "Ягаан хавтас — Энэ портфолио",
+      desc: "Яг одоо үзэж буй сайт. Хавтас бүр нэг хуудас бөгөөд шошгон дээр дарахад дэлгэгдэн нээгддэг. Ямар ч framework ашиглаагүй, цэвэр HTML, CSS, JavaScript-ээр бичсэн.",
       image: "assets/project-3.svg",
-      tags: ["JavaScript", "Chart.js", "API"],
-      demo: "https://example.com",
-      code: "https://github.com/your-username/project-3"
+      tags: ["HTML", "CSS", "JavaScript"],
+      demo: "",
+      code: "https://github.com/chaminzul0-bit/portfolio"
     }
   ],
 

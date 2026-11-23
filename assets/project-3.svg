@@ -1,1 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200"><rect width="320" height="200" fill="#12304a"/><circle cx="70" cy="70" r="26" fill="#ffcf6b"/><path d="M88 92 a18 18 0 0 1 34 -6 a14 14 0 0 1 10 26 h-44 a12 12 0 0 1 0 -20z" fill="#dfe9f3"/><polyline points="30,170 70,150 110,158 150,120 190,132 230,96 270,110 300,84" fill="none" stroke="#7fd1c7" stroke-width="4" stroke-linejoin="round"/><g fill="#ff8a5c"><circle cx="150" cy="120" r="5"/><circle cx="230" cy="96" r="5"/></g><text x="230" y="52" fill="#eef0ff" font-family="sans-serif" font-size="30" font-weight="700" text-anchor="middle">-18°</text><text x="160" y="22" fill="#eef0ff" font-family="sans-serif" font-size="12" text-anchor="middle">ДЭЛГЭЦИЙН ЗУРГААР СОЛИНО</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240">
+  <!-- Энэ портфолио — ягаан хавтаснууд -->
+  <defs>
+    <pattern id="s" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#e2b0b8" opacity=".5"/></pattern>
+  </defs>
+  <rect width="320" height="240" fill="#f2c6cc"/>
+  <rect width="320" height="240" fill="url(#s)"/>
+  <!-- нээлттэй хавтас -->
+  <rect x="38" y="0" width="150" height="240" fill="#fbf5f2"/>
+  <text x="54" y="48" fill="#b4566a" font-family="sans-serif" font-size="6" letter-spacing="1.5">ХУВИЙН ПОРТФОЛИО</text>
+  <text x="54" y="84" fill="#2b1a1e" font-family="Georgia, serif" font-style="italic" font-size="30">Чаминзул</text>
+  <g fill="#2b1a1e" opacity=".3"><rect x="54" y="100" width="100" height="3"/><rect x="54" y="108" width="80" height="3"/></g>
+  <g stroke="#2b1a1e" stroke-opacity=".15"><line x1="54" y1="130" x2="170" y2="130"/><line x1="54" y1="148" x2="170" y2="148"/><line x1="54" y1="166" x2="170" y2="166"/><line x1="54" y1="184" x2="170" y2="184"/></g>
+  <circle cx="160" cy="40" r="16" fill="#b4566a"/>
+  <!-- хаалттай хавтаснууд -->
+  <g>
+    <rect x="188" y="0" width="22" height="240" fill="#f2c6cc"/><rect x="210" y="0" width="16" height="240" fill="#5c5859"/>
+    <rect x="226" y="0" width="22" height="240" fill="#f2c6cc"/><rect x="248" y="0" width="16" height="240" fill="#efe6dc"/>
+    <rect x="264" y="0" width="22" height="240" fill="#f2c6cc"/><rect x="286" y="0" width="16" height="240" fill="#2c3672"/>
+    <rect x="302" y="0" width="18" height="240" fill="#f2c6cc"/>
+  </g>
+  <g fill="#fff"><rect x="214" y="40" width="7" height="44"/><rect x="252" y="56" width="7" height="44"/><rect x="290" y="72" width="7" height="44"/><rect x="26" y="30" width="7" height="30"/></g>
+  <rect x="0" y="0" width="38" height="240" fill="#f2c6cc"/>
+  <text transform="translate(26 222) rotate(-90)" fill="#2b1a1e" font-family="Georgia, serif" font-style="italic" font-size="22">портфолио</text>
+</svg>

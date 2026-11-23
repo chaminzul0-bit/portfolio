@@ -53,7 +53,7 @@ window.PORTFOLIO = {
       desc: "Яг одоо үзэж буй сайт. Хавтас бүр нэг хуудас бөгөөд шошгон дээр дарахад дэлгэгдэн нээгддэг. Ямар ч framework ашиглаагүй, цэвэр HTML, CSS, JavaScript-ээр бичсэн.",
       image: "assets/project-3.svg",
       tags: ["HTML", "CSS", "JavaScript"],
-      demo: "https://portfolio-olive-alpha-56.vercel.app",
+      demo: "https://chaminzul.vercel.app",
       code: "https://github.com/chaminzul0-bit/portfolio"
     }
   ],

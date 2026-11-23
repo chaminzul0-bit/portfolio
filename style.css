@@ -1,0 +1,466 @@
+/* =========================================================
+   style.css — Ягаан хавтас портфолио
+   Гол санаа: .folder бүр flex элемент. Хаалттай үед нарийн,
+   .open класстай үед flex-grow: 1 болж үлдсэн зайг бүхэлд нь эзэлнэ.
+   ========================================================= */
+
+:root {
+  --pink: #f2c6cc;          /* хавтасны ягаан */
+  --pink-dark: #e7adb6;
+  --ink: #2b1a1e;           /* бараан бичиг */
+  --ink-soft: #6d5459;
+  --paper: #fbf5f2;         /* доторх цаас */
+  --rose: #b4566a;
+  --label: #ffffff;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "Manrope", system-ui, sans-serif;
+
+  --spine: 46px;            /* хаалттай хавтасны нурууны өргөн */
+  --spine-open: 128px;      /* нээлттэй хавтасны нурууны өргөн */
+  --peek: 76px;             /* хаалттай үед харагдах зурвасын өргөн */
+  --ease: cubic-bezier(.7, 0, .2, 1);
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--pink);
+  overflow: hidden;           /* компьютер дээр хуудас scroll хийхгүй */
+}
+
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+
+/* Ягаан цаасны нарийн судал (зурган дээрх шиг) */
+.spine,
+body {
+  background-image: repeating-linear-gradient(0deg, rgba(120, 50, 60, .035) 0 1px, transparent 1px 5px);
+  background-color: var(--pink);
+}
+
+/* ---------- Хавтасны тавиур ---------- */
+.cabinet {
+  display: flex;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.folder {
+  position: relative;
+  display: flex;
+  flex: 0 0 calc(var(--spine) + var(--peek));
+  min-width: 0;
+  transition: flex-grow .8s var(--ease), flex-basis .8s var(--ease);
+}
+.folder.open {
+  flex-grow: 1;
+  flex-basis: calc(var(--spine-open) + var(--peek));
+}
+
+/* ---------- Нуруу ба хавчуурга ---------- */
+.spine {
+  position: relative;
+  z-index: 3;
+  flex: 0 0 var(--spine);
+  width: var(--spine);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  /* хавтасны сүүдэр өмнөх зураг дээр унана */
+  filter: drop-shadow(-6px 0 10px rgba(90, 30, 45, .22));
+  transition: flex-basis .8s var(--ease), width .8s var(--ease);
+}
+.folder.open .spine { flex-basis: var(--spine-open); width: var(--spine-open); cursor: default; }
+
+/* Хавчуурга: нуруунаас баруун тийш цухуйсан хэсэг */
+.tab {
+  position: absolute;
+  top: calc(40px + var(--i) * 22px);
+  right: -30px;
+  width: 30px;
+  height: 210px;
+  background: inherit;
+  background-color: var(--pink);
+  border-radius: 0 16px 16px 0;
+  display: grid;
+  place-items: center;
+}
+/* Хавчуурга нуруутай нийлэх хотгор булангууд */
+.tab::before,
+.tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 16px;
+  height: 16px;
+}
+.tab::before { top: -16px;    background: radial-gradient(circle at 100% 0,    transparent 15.5px, var(--pink) 16px); }
+.tab::after  { bottom: -16px; background: radial-gradient(circle at 100% 100%, transparent 15.5px, var(--pink) 16px); }
+
+/* Цагаан шошго — доороос дээш уншигдана */
+.tab-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  background: var(--label);
+  padding: 10px 4px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .02em;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+  transition: transform .3s;
+}
+.spine:hover .tab-label { transform: rotate(180deg) translateX(3px); }
+
+/* Нээлттэй хавтасны нуруун дээрх том налуу гарчиг */
+.spine-title {
+  position: absolute;
+  left: 50%;
+  bottom: 56px;
+  writing-mode: vertical-rl;
+  transform: translateX(-50%) rotate(180deg);
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(56px, 8vh, 88px);
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .4s;
+}
+.folder.open .spine-title { opacity: 1; transition-delay: .45s; }
+
+.spine-num {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+/* ---------- Цонх: peek + content ---------- */
+.window {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.peek {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: pointer;
+  transition: opacity .5s, transform .8s var(--ease);
+}
+.folder.open .peek { opacity: 0; pointer-events: none; transform: scale(1.05); }
+.folder:not(.open) .window:hover .peek { transform: scale(1.04); }
+
+/* Peek зурвасууд — сэтгүүлийн хавтас шиг тасархай том бичиг */
+.peek span,
+.peek .peek-word {
+  position: absolute;
+  font-family: var(--serif);
+  font-style: italic;
+  line-height: .85;
+  white-space: nowrap;
+}
+.peek-home { background: linear-gradient(160deg, #d9808f, #7a2c3d); color: #fff; }
+.peek-home span { font-size: 220px; top: 18%; left: -20px; writing-mode: vertical-rl; }
+
+.peek-about { background: linear-gradient(180deg, #9d9a9a, #3f3b3c); }
+.peek-about img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.05); }
+.peek-about .peek-word { color: #fff; font-size: 170px; top: 10%; left: -14px; writing-mode: vertical-rl; }
+
+.peek-skills { background: #efe6dc; color: var(--ink); }
+.peek-skills .peek-word { position: static; display: block; font-size: 64px; font-style: normal; font-weight: 600; margin-left: -8px; }
+.peek-skills .peek-list { position: absolute; top: 30px; left: 0; }
+
+.peek-projects img { width: 100%; height: 100%; object-fit: cover; }
+
+.peek-contact { background: #161214; color: #fff; }
+.peek-contact span { font-size: 150px; top: 8%; left: -10px; writing-mode: vertical-rl; }
+
+/* ---------- Нээгдсэн агуулга ---------- */
+.content {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: clamp(40px, 7vh, 80px) clamp(28px, 5vw, 80px) 64px clamp(44px, 5vw, 80px);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .3s, visibility 0s .3s;
+  scrollbar-width: thin;
+}
+.folder.open .content {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .4s .35s, visibility 0s;
+}
+
+/* Агуулгын мөрүүд ээлжлэн дээшээ гарч ирнэ */
+.stagger { opacity: 0; transform: translateY(18px); transition: opacity .5s, transform .6s var(--ease); }
+.folder.open .stagger { opacity: 1; transform: none; }
+.folder.open .stagger:nth-child(1) { transition-delay: .40s; }
+.folder.open .stagger:nth-child(2) { transition-delay: .48s; }
+.folder.open .stagger:nth-child(3) { transition-delay: .56s; }
+.folder.open .stagger:nth-child(4) { transition-delay: .64s; }
+.folder.open .stagger:nth-child(5) { transition-delay: .72s; }
+.folder.open .stagger:nth-child(n+6) { transition-delay: .80s; }
+
+.eyebrow {
+  margin: 0 0 18px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+
+h1, h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  line-height: .95;
+  margin: 0 0 28px;
+  letter-spacing: -.01em;
+}
+h2 { font-size: clamp(44px, 6vw, 84px); }
+h2 em, h1 em { font-style: italic; color: var(--rose); }
+
+/* Нүүр */
+.hero-name { font-size: clamp(56px, 9vw, 140px); font-style: italic; font-weight: 400; }
+.hero-role { font-size: 18px; font-weight: 700; margin: 0 0 8px; }
+.hero-tagline { font-family: var(--serif); font-size: clamp(22px, 2.4vw, 30px); font-style: italic; max-width: 30ch; margin: 0 0 40px; color: var(--ink-soft); line-height: 1.25; }
+
+.toc { list-style: none; padding: 0; margin: 0; max-width: 460px; border-top: 1px solid rgba(43, 26, 30, .15); }
+.toc a {
+  display: flex;
+  gap: 18px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(43, 26, 30, .15);
+  text-decoration: none;
+  font-family: var(--serif);
+  font-size: 26px;
+  transition: padding .3s, color .3s;
+}
+.toc a span { font-family: var(--sans); font-size: 12px; font-weight: 700; color: var(--rose); }
+.toc a:hover { padding-left: 12px; color: var(--rose); }
+
+.hint { margin-top: 28px; font-size: 13px; color: var(--ink-soft); }
+
+/* Тамга (easter egg) */
+.sticker {
+  position: absolute;
+  top: clamp(40px, 8vh, 90px);
+  right: clamp(24px, 5vw, 80px);
+  width: 112px; height: 112px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--rose);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  rotate: -12deg;
+  transition: rotate .5s var(--ease), scale .3s;
+}
+.sticker:hover { rotate: 8deg; scale: 1.06; }
+.stamp {
+  position: absolute;
+  right: clamp(60px, 14vw, 240px);
+  bottom: 18%;
+  padding: 10px 22px;
+  border: 4px solid var(--rose);
+  border-radius: 10px;
+  color: var(--rose);
+  font-family: var(--serif);
+  font-size: 44px;
+  font-weight: 600;
+  line-height: .9;
+  text-align: center;
+  text-transform: uppercase;
+  opacity: 0;
+  rotate: -14deg;
+  scale: 3;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+.stamp.on { animation: stamp .45s var(--ease) forwards; }
+@keyframes stamp { to { opacity: .85; scale: 1; } }
+
+/* Миний тухай */
+.about-grid { display: grid; grid-template-columns: minmax(180px, 280px) 1fr; gap: clamp(24px, 4vw, 56px); align-items: start; }
+.photo {
+  margin: 0;
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(160deg, #d9808f, #7a2c3d);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  box-shadow: 10px 10px 0 var(--pink);
+}
+.photo img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(.2); }
+.photo span { font-family: var(--serif); font-style: italic; font-size: 120px; color: #fff; }
+.about-text p { font-size: 17px; line-height: 1.75; margin: 0 0 16px; max-width: 58ch; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin: 28px 0 0; }
+.facts div { border-top: 1px solid rgba(43, 26, 30, .2); padding-top: 10px; }
+.facts dt { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--rose); }
+.facts dd { margin: 4px 0 0; font-family: var(--serif); font-size: 22px; }
+
+/* Ур чадвар — сэтгүүлийн индекс шиг */
+.skill-index { list-style: none; padding: 0; margin: 0; columns: 2 260px; column-gap: 48px; }
+.skill-index li {
+  break-inside: avoid;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(43, 26, 30, .15);
+  font-family: var(--serif);
+  font-size: clamp(28px, 3vw, 40px);
+  transition: color .3s, padding .3s;
+}
+.skill-index li span { font-family: var(--sans); font-size: 12px; font-weight: 700; color: var(--rose); min-width: 22px; }
+.skill-index li:hover { color: var(--rose); padding-left: 10px; font-style: italic; }
+
+/* Бүтээлүүд */
+.projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 28px; }
+.project { display: flex; flex-direction: column; }
+.project-img-wrap { overflow: hidden; aspect-ratio: 4 / 3; background: var(--pink); }
+.project-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease); }
+.project:hover .project-img { transform: scale(1.05); }
+.project-num { margin-top: 14px; font-size: 12px; font-weight: 700; color: var(--rose); letter-spacing: .14em; }
+.project h3 { font-family: var(--serif); font-size: 28px; font-weight: 500; line-height: 1.05; margin: 6px 0 8px; }
+.project p { margin: 0 0 12px; color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 0 0 14px; }
+.tags li { font-size: 12px; padding: 3px 10px; background: var(--pink); }
+.project-links { margin-top: auto; display: flex; gap: 18px; }
+.project-links a { font-size: 14px; font-weight: 700; text-decoration: none; border-bottom: 1.5px solid currentColor; }
+.project-links a:hover { color: var(--rose); }
+
+/* Холбоо барих — хар хавтас */
+.content-dark { background: #161214; color: #f7ecee; }
+.content-dark .eyebrow, .content-dark h2 em { color: var(--pink); }
+.lead { font-family: var(--serif); font-size: clamp(22px, 2.4vw, 28px); font-style: italic; max-width: 32ch; line-height: 1.3; margin: 0 0 36px; opacity: .85; }
+.email-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-bottom: 36px; }
+.big-email {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 56px);
+  text-decoration: none;
+  border-bottom: 2px solid var(--pink);
+  overflow-wrap: anywhere;
+}
+.big-email:hover { color: var(--pink); }
+.copy-btn {
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, .3);
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+}
+.copy-btn:hover { background: var(--pink); color: var(--ink); }
+.contact-links { list-style: none; padding: 0; margin: 0; max-width: 520px; border-top: 1px solid rgba(255, 255, 255, .15); }
+.contact-links a {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .15);
+  text-decoration: none;
+  transition: padding .3s, color .3s;
+}
+.contact-links a:hover { padding-left: 10px; color: var(--pink); }
+.contact-links .label { font-weight: 700; }
+.contact-links .value { opacity: .6; overflow-wrap: anywhere; text-align: right; }
+.footer-note { margin-top: 56px; font-size: 13px; opacity: .5; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  padding: 10px 20px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 14px;
+  z-index: 50;
+  transition: all .4s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+:focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; }
+
+/* ---------- Responsive ---------- */
+
+/* Таблет: зурвасуудыг нарийсгана */
+@media (max-width: 1100px) {
+  :root { --peek: 34px; --spine-open: 96px; }
+  .spine-title { font-size: 56px; }
+}
+
+/* Гар утас: хавтаснууд дээрээс доош давхарлана */
+@media (max-width: 760px) {
+  body { overflow: auto; }
+  .cabinet { flex-direction: column; height: auto; min-height: 100dvh; }
+
+  .folder,
+  .folder.open { flex: none; flex-direction: column; }
+
+  .spine,
+  .folder.open .spine {
+    width: 100%;
+    flex-basis: auto;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    border-radius: 18px 18px 0 0;
+    margin-top: -14px;        /* хавтаснууд бие биенийхээ дээр давхарлана */
+    filter: drop-shadow(0 -6px 10px rgba(90, 30, 45, .18));
+  }
+  .folder:first-child .spine { margin-top: 0; border-radius: 0; }
+
+  .spine-title,
+  .spine-num {
+    position: static;
+    transform: none;
+    writing-mode: horizontal-tb;
+    opacity: 1;
+  }
+  .spine-title { font-size: 28px; }
+  .tab { display: none; }
+
+  .window { flex: none; height: 72px; }
+  .folder.open .window { height: auto; }
+  .content { position: relative; inset: auto; padding: 32px 18px 64px; }
+  .folder:not(.open) .content { display: none; }
+
+  .peek-home span, .peek-about .peek-word, .peek-contact span { writing-mode: horizontal-tb; font-size: 110px; top: -10px; left: 12px; }
+  .peek-skills .peek-list { display: flex; gap: 24px; top: 10px; left: 12px; }
+
+  .sticker { position: static; width: 96px; height: 96px; margin-bottom: 20px; }
+  .stamp { right: 18px; bottom: 120px; font-size: 32px; }
+  .about-grid { grid-template-columns: 1fr; }
+  .photo { max-width: 240px; }
+  .projects { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; transition-delay: 0s !important; }
+}

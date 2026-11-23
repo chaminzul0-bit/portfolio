@@ -10,8 +10,15 @@
   --ink: #2b1a1e;           /* бараан бичиг */
   --ink-soft: #6d5459;
   --paper: #fbf5f2;         /* доторх цаас */
-  --rose: #b4566a;
+  --rose: #b4566a;          /* гол онцлох өнгө */
   --label: #ffffff;
+  --soft: #f2c6cc;          /* цаасан дээрх зөөлөн дэвсгэр (tag, зургийн хүрээ) */
+  --deep-a: #d9808f;        /* нүүрний зурвасын градиент */
+  --deep-b: #7a2c3d;
+  --spine-ink: #2b1a1e;     /* хавтасны нуруун дээрх бичиг */
+  --on-dark: #f2c6cc;       /* хар хавтас дээрх онцлох өнгө */
+  --stripe: rgba(120, 50, 60, .035);
+  --shadow: rgba(90, 30, 45, .22);
   --serif: "Cormorant Garamond", Georgia, serif;
   --sans: "Manrope", system-ui, sans-serif;
 
@@ -19,6 +26,28 @@
   --spine-open: 128px;      /* нээлттэй хавтасны нурууны өргөн */
   --peek: 76px;             /* хаалттай үед харагдах зурвасын өргөн */
   --ease: cubic-bezier(.7, 0, .2, 1);
+}
+
+/* ---------- Өнгөний сэдвүүд ----------
+   <html data-theme="..."> өөрчлөгдөхөд дээрх хувьсагчид солигдож,
+   бүх сайт нэг дор шинэ өнгөтэй болно. Ягаан нь үндсэн (:root). */
+[data-theme="sage"] {
+  --pink: #c9d8c5; --pink-dark: #a9c0a4; --soft: #c9d8c5;
+  --ink: #1d2a20; --ink-soft: #55665a; --paper: #f6f7f2; --rose: #3f6b4a;
+  --deep-a: #8fb08a; --deep-b: #2f4d36; --spine-ink: #1d2a20; --on-dark: #b9d3b3;
+  --stripe: rgba(40, 70, 45, .04); --shadow: rgba(30, 60, 35, .22);
+}
+[data-theme="lavender"] {
+  --pink: #d9cff0; --pink-dark: #bfb0e3; --soft: #d9cff0;
+  --ink: #241c33; --ink-soft: #625a74; --paper: #f8f6fc; --rose: #6b4fa0;
+  --deep-a: #a48fd6; --deep-b: #3e2a6b; --spine-ink: #241c33; --on-dark: #cfc2f0;
+  --stripe: rgba(60, 40, 100, .04); --shadow: rgba(50, 30, 90, .22);
+}
+[data-theme="noir"] {
+  --pink: #1d1a1c; --pink-dark: #2c272a; --soft: #ece3d2;
+  --ink: #221d1a; --ink-soft: #6b625a; --paper: #f6f1e8; --rose: #9a7536;
+  --deep-a: #3a3236; --deep-b: #0e0c0d; --spine-ink: #f1e6d0; --on-dark: #d8b46a;
+  --stripe: rgba(255, 255, 255, .03); --shadow: rgba(0, 0, 0, .45);
 }
 
 * { box-sizing: border-box; }
@@ -39,9 +68,11 @@ button { font: inherit; color: inherit; }
 /* Ягаан цаасны нарийн судал (зурган дээрх шиг) */
 .spine,
 body {
-  background-image: repeating-linear-gradient(0deg, rgba(120, 50, 60, .035) 0 1px, transparent 1px 5px);
+  background-image: repeating-linear-gradient(0deg, var(--stripe) 0 1px, transparent 1px 5px);
   background-color: var(--pink);
+  transition: background-color .6s, color .6s; /* өнгө солигдоход зөөлөн шилжинэ */
 }
+.spine { color: var(--spine-ink); }
 
 /* ---------- Хавтасны тавиур ---------- */
 .cabinet {
@@ -72,8 +103,8 @@ body {
   padding: 0;
   cursor: pointer;
   /* хавтасны сүүдэр өмнөх зураг дээр унана */
-  filter: drop-shadow(-6px 0 10px rgba(90, 30, 45, .22));
-  transition: flex-basis .8s var(--ease), width .8s var(--ease);
+  filter: drop-shadow(-6px 0 10px var(--shadow));
+  transition: flex-basis .8s var(--ease), width .8s var(--ease), background-color .6s, color .6s;
 }
 .folder.open .spine { flex-basis: var(--spine-open); width: var(--spine-open); cursor: default; }
 
@@ -142,7 +173,7 @@ body {
   transform: translateX(-50%);
   font-size: 11px;
   font-weight: 700;
-  color: var(--ink-soft);
+  opacity: .55;               /* нурууны бичгийн өнгөтэй, бүдэг */
 }
 
 /* ---------- Цонх: peek + content ---------- */
@@ -173,11 +204,11 @@ body {
   line-height: .85;
   white-space: nowrap;
 }
-.peek-home { background: linear-gradient(160deg, #d9808f, #7a2c3d); color: #fff; }
+.peek-home { background: linear-gradient(160deg, var(--deep-a), var(--deep-b)); color: #fff; }
 .peek-home span { font-size: 220px; top: 18%; left: -20px; writing-mode: vertical-rl; }
 
 .peek-about { background: linear-gradient(180deg, #9d9a9a, #3f3b3c); }
-.peek-about:has(img) { background: var(--pink-dark); }
+.peek-about:has(img) { background: var(--soft); }
 .peek-about img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; mix-blend-mode: multiply; }
 .peek-about .peek-word { color: #fff; font-size: 170px; top: 10%; left: -14px; writing-mode: vertical-rl; }
 
@@ -308,14 +339,14 @@ h2 em, h1 em { font-style: italic; color: var(--rose); }
   flex: 0 0 min(240px, 100%);
   margin: 0;
   aspect-ratio: 3 / 4;
-  background: linear-gradient(160deg, #d9808f, #7a2c3d);
+  background: linear-gradient(160deg, var(--deep-a), var(--deep-b));
   display: grid;
   place-items: center;
   overflow: hidden;
-  box-shadow: 10px 10px 0 var(--pink);
+  box-shadow: 10px 10px 0 var(--soft);
 }
 /* Зурагтай үед: бүтэн биеийн дүрийг тайрахгүй, цагаан дэвсгэрийг ягаантай уусгана (multiply) */
-.photo:has(img) { aspect-ratio: 2 / 3; background: var(--pink); }
+.photo:has(img) { aspect-ratio: 2 / 3; background: var(--soft); }
 .photo img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
 .photo span { font-family: var(--serif); font-style: italic; font-size: 120px; color: #fff; }
 .about-text p { font-size: 17px; line-height: 1.75; margin: 0 0 16px; max-width: 58ch; }
@@ -343,23 +374,23 @@ h2 em, h1 em { font-style: italic; color: var(--rose); }
 /* Бүтээлүүд */
 .projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 28px; }
 .project { display: flex; flex-direction: column; }
-.project-img-wrap { overflow: hidden; aspect-ratio: 4 / 3; background: var(--pink); }
+.project-img-wrap { overflow: hidden; aspect-ratio: 4 / 3; background: var(--soft); }
 .project-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease); }
 .project:hover .project-img { transform: scale(1.05); }
 /* Зураг ачаалагдаагүй үед хоосон цонх биш, судалтай ягаан дэвсгэр харагдана */
-.project-img-wrap.no-img { background: repeating-linear-gradient(135deg, var(--pink) 0 12px, var(--pink-dark) 12px 24px); }
+.project-img-wrap.no-img { background: repeating-linear-gradient(135deg, var(--soft) 0 12px, var(--paper) 12px 24px); }
 .project-num { margin-top: 14px; font-size: 12px; font-weight: 700; color: var(--rose); letter-spacing: .14em; }
 .project h3 { font-family: var(--serif); font-size: 28px; font-weight: 500; line-height: 1.05; margin: 6px 0 8px; }
 .project p { margin: 0 0 12px; color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 0 0 14px; }
-.tags li { font-size: 12px; padding: 3px 10px; background: var(--pink); }
+.tags li { font-size: 12px; padding: 3px 10px; background: var(--soft); }
 .project-links { margin-top: auto; display: flex; gap: 18px; }
 .project-links a { font-size: 14px; font-weight: 700; text-decoration: none; border-bottom: 1.5px solid currentColor; }
 .project-links a:hover { color: var(--rose); }
 
 /* Холбоо барих — хар хавтас */
 .content-dark { background: #161214; color: #f7ecee; }
-.content-dark .eyebrow, .content-dark h2 em { color: var(--pink); }
+.content-dark .eyebrow, .content-dark h2 em { color: var(--on-dark); }
 .lead { font-family: var(--serif); font-size: clamp(22px, 2.4vw, 28px); font-style: italic; max-width: 32ch; line-height: 1.3; margin: 0 0 36px; opacity: .85; }
 .email-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-bottom: 36px; }
 /* Имэйлд sans фонт: serif фонтын "0" нь "o" үсэгтэй андуурагддаг */
@@ -369,10 +400,10 @@ h2 em, h1 em { font-style: italic; color: var(--rose); }
   letter-spacing: -.01em;
   font-size: clamp(24px, 3.4vw, 46px);
   text-decoration: none;
-  border-bottom: 2px solid var(--pink);
+  border-bottom: 2px solid var(--on-dark);
   overflow-wrap: anywhere;
 }
-.big-email:hover { color: var(--pink); }
+.big-email:hover { color: var(--on-dark); }
 .copy-btn {
   padding: 8px 16px;
   border: 1px solid rgba(255, 255, 255, .3);
@@ -381,7 +412,7 @@ h2 em, h1 em { font-style: italic; color: var(--rose); }
   cursor: pointer;
   font-size: 13px;
 }
-.copy-btn:hover { background: var(--pink); color: var(--ink); }
+.copy-btn:hover { background: var(--on-dark); color: #161214; }
 .contact-links { list-style: none; padding: 0; margin: 0; max-width: 520px; border-top: 1px solid rgba(255, 255, 255, .15); }
 .contact-links a {
   display: flex;
@@ -392,10 +423,39 @@ h2 em, h1 em { font-style: italic; color: var(--rose); }
   text-decoration: none;
   transition: padding .3s, color .3s;
 }
-.contact-links a:hover { padding-left: 10px; color: var(--pink); }
+.contact-links a:hover { padding-left: 10px; color: var(--on-dark); }
 .contact-links .label { font-weight: 700; }
 .contact-links .value { opacity: .6; overflow-wrap: anywhere; text-align: right; }
 .footer-note { margin-top: 56px; font-size: 13px; opacity: .5; }
+
+/* ---------- Өнгө сонгогч ---------- */
+.swatches {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 40;
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .85);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: var(--c);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .25);
+  cursor: pointer;
+  padding: 0;
+  transition: transform .25s var(--ease), box-shadow .25s;
+}
+.swatch:hover { transform: scale(1.15); }
+.swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px #2b1a1e; transform: scale(1.12); }
 
 /* Toast */
 .toast {

@@ -164,6 +164,31 @@ $("#copyBtn").addEventListener("click", async () => {
   }
 });
 
+// Өнгө сонгогч: <html data-theme="..."> солиход CSS хувьсагчид солигдоно.
+// Сонголтыг localStorage-д хадгалж, дараа орж ирэхэд сэргээнэ.
+const THEMES = {
+  pink:     { name: "Ягаан",   color: "#f2c6cc" },
+  sage:     { name: "Ногоон",  color: "#c9d8c5" },
+  lavender: { name: "Лаванда", color: "#d9cff0" },
+  noir:     { name: "Хар алт", color: "#1d1a1c" },
+};
+const swatches = document.querySelectorAll("[data-theme-pick]");
+
+function setTheme(theme, { announce = true } = {}) {
+  if (!THEMES[theme]) theme = "pink";
+  if (theme === "pink") delete document.documentElement.dataset.theme; // ягаан = үндсэн
+  else document.documentElement.dataset.theme = theme;
+  swatches.forEach((b) => b.setAttribute("aria-pressed", b.dataset.themePick === theme));
+  document.querySelector('meta[name="theme-color"]').content = THEMES[theme].color;
+  try { localStorage.setItem("theme", theme); } catch { /* хувийн цонхонд хадгалахгүй байж болно */ }
+  if (announce) toast(`🎨 ${THEMES[theme].name} хавтас`);
+}
+
+swatches.forEach((b) => b.addEventListener("click", () => setTheme(b.dataset.themePick)));
+let savedTheme = "pink";
+try { savedTheme = localStorage.getItem("theme") || "pink"; } catch {}
+setTheme(savedTheme, { announce: false });
+
 // Easter egg: тамган дээр 3 дарахад "АЖИЛД АВЪЯ!" тамга дарагдана
 let stickerClicks = 0;
 $("#sticker").addEventListener("click", () => {

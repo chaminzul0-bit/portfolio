@@ -49,7 +49,8 @@ $("#projectList").innerHTML = data.projects
     (p, i) => `
   <article class="project stagger">
     <div class="project-img-wrap">
-      <img class="project-img" src="${esc(p.image)}" alt="${esc(p.title)} — дэлгэцийн зураг" loading="lazy" />
+      <img class="project-img" src="${esc(p.image)}" alt="${esc(p.title)} — дэлгэцийн зураг" loading="lazy"
+           onerror="this.parentElement.classList.add('no-img'); this.remove();" />
     </div>
     <span class="project-num">№ ${String(i + 1).padStart(2, "0")}</span>
     <h3>${esc(p.title)}</h3>
@@ -88,19 +89,29 @@ const folders = [...document.querySelectorAll(".folder")];
 const ids = folders.map((f) => f.dataset.id);
 const isMobile = () => window.matchMedia("(max-width: 760px)").matches;
 
+// .content-ийг JavaScript-ээр фокуслах боломжтой болгоно (Tab дараалалд орохгүй)
+folders.forEach((f) => f.querySelector(".content").setAttribute("tabindex", "-1"));
+
 // Зөвхөн нэг хавтас нээлттэй байна: бусдаас нь .open-ийг авна
-function openFolder(id, { updateUrl = true } = {}) {
+// focus = true: хэрэглэгч өөрөө нээсэн үед гарын фокусыг шинэ агуулга руу шилжүүлнэ
+function openFolder(id, { updateUrl = true, focus = true } = {}) {
   if (!ids.includes(id)) id = "home";
+  const folder = folders[ids.indexOf(id)];
+  const alreadyOpen = folder.classList.contains("open");
+
   folders.forEach((f) => {
-    const open = f.dataset.id === id;
+    const open = f === folder;
     f.classList.toggle("open", open);
     f.querySelector(".spine").setAttribute("aria-expanded", open);
   });
   if (updateUrl && location.hash !== `#${id}`) history.pushState(null, "", `#${id}`);
 
+  const content = folder.querySelector(".content");
+  if (!alreadyOpen) content.scrollTop = 0; // шинээр нээгдсэн хавтас дээрээсээ эхэлнэ
+  if (focus) content.focus({ preventScroll: true });
+
   // Гар утсан дээр нээгдсэн хавтас руу гүйлгэнэ
-  if (isMobile()) {
-    const folder = folders[ids.indexOf(id)];
+  if (isMobile() && (focus || id !== "home")) {
     setTimeout(() => folder.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
   }
 }
@@ -119,17 +130,19 @@ document.querySelectorAll("[data-open]").forEach((a) =>
   })
 );
 
-// ← → товчоор дараагийн / өмнөх хавтас руу шилжинэ
+// ← → товчоор дараагийн / өмнөх хавтас руу, Esc-ээр нүүр рүү шилжинэ
 window.addEventListener("keydown", (e) => {
-  if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+  if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return; // хөтчийн товчлолд саад болохгүй
+  if (e.target instanceof Element && e.target.closest("input, textarea, select")) return;
   const current = ids.indexOf(document.querySelector(".folder.open").dataset.id);
-  const next = e.key === "ArrowRight" ? Math.min(current + 1, ids.length - 1) : Math.max(current - 1, 0);
-  openFolder(ids[next]);
+  if (e.key === "ArrowRight" && current < ids.length - 1) openFolder(ids[current + 1]);
+  else if (e.key === "ArrowLeft" && current > 0) openFolder(ids[current - 1]);
+  else if (e.key === "Escape" && current !== 0) openFolder("home");
 });
 
 // Хөтчийн "буцах" товч болон шууд холбоос (жишээ нь .../#projects)
-window.addEventListener("popstate", () => openFolder(location.hash.slice(1), { updateUrl: false }));
-openFolder(location.hash.slice(1) || "home", { updateUrl: false });
+window.addEventListener("popstate", () => openFolder(location.hash.slice(1), { updateUrl: false, focus: false }));
+openFolder(location.hash.slice(1) || "home", { updateUrl: false, focus: false });
 
 /* ---------- 3. Жижиг харилцан үйлдлүүд ---------- */
 

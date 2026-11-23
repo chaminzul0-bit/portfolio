@@ -15,6 +15,7 @@
   --deep-a: #d9808f;        /* нүүрний зурвасын градиент */
   --deep-b: #7a2c3d;
   --spine-ink: #2b1a1e;     /* хавтасны нуруун дээрх бичиг */
+  --spine-accent: var(--rose); /* нурууны гарчгийн налуу үг */
   --on-dark: #f2c6cc;       /* хар хавтас дээрх онцлох өнгө */
   --stripe: rgba(120, 50, 60, .035);
   --shadow: rgba(90, 30, 45, .22);
@@ -45,7 +46,7 @@
 [data-theme="noir"] {
   --pink: #1d1a1c; --pink-dark: #2c272a; --soft: #ece3d2;
   --ink: #221d1a; --ink-soft: #6b625a; --paper: #f6f1e8; --rose: #9a7536;
-  --deep-a: #3a3236; --deep-b: #0e0c0d; --spine-ink: #f1e6d0; --on-dark: #d8b46a;
+  --deep-a: #3a3236; --deep-b: #0e0c0d; --spine-ink: #f1e6d0; --on-dark: #d8b46a; --spine-accent: #d8b46a;
   --stripe: rgba(255, 255, 255, .03); --shadow: rgba(0, 0, 0, .45);
 }
 
@@ -136,7 +137,9 @@ body {
 .tab { transition: right .3s var(--ease), width .3s var(--ease); }
 .folder:not(.open) .spine:hover .tab { right: -36px; width: 36px; }
 
-/* Нээлттэй хавтасны нуруун дээрх том налуу гарчиг */
+/* Нээлттэй хавтасны нуруун дээрх том гарчиг — постер шиг:
+   эхний үг босоо (upright), хоёр дахь үг <em> налуу, онцлох өнгөтэй.
+   Хэмжээ нь дэлгэцийн өндрөөс (vh) хамаарах тул намхан дэлгэцэнд ч тасрахгүй. */
 .spine-title {
   position: absolute;
   left: 50%;
@@ -144,15 +147,23 @@ body {
   writing-mode: vertical-rl;
   transform: translateX(-50%) rotate(180deg);
   font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(56px, 8vh, 88px);
-  line-height: 1;
+  font-style: normal;
+  font-weight: 500;
+  font-size: min(8.5vh, 80px);
+  line-height: .9;
+  letter-spacing: -.01em;
   white-space: nowrap;
   opacity: 0;
-  transition: opacity .4s;
+  filter: blur(6px);
+  transition: opacity .5s, filter .6s;
 }
-.folder.open .spine-title { opacity: 1; transition-delay: .45s; }
+.spine-title em {
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.12em;
+  color: var(--spine-accent);
+}
+.folder.open .spine-title { opacity: 1; filter: none; transition-delay: .45s; }
 
 .spine-num {
   position: absolute;
@@ -490,7 +501,9 @@ h2 em, h1 em { font-style: italic; color: var(--rose); }
     transform: none;
     writing-mode: horizontal-tb;
     opacity: 1;
+    filter: none;             /* гар утсан дээр гарчиг үргэлж тод харагдана */
   }
+  .spine-num { opacity: .55; }
   .spine-title { font-size: 28px; }
   .tab { display: none; }
 

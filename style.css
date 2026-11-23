@@ -338,11 +338,13 @@ h2 em, h1 em { font-style: italic; color: var(--rose); }
 .skill-index li:hover { color: var(--rose); padding-left: 10px; font-style: italic; }
 
 /* Бүтээлүүд */
-.projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 28px; }
+.projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 28px; }
 .project { display: flex; flex-direction: column; }
 .project-img-wrap { overflow: hidden; aspect-ratio: 4 / 3; background: var(--pink); }
 .project-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease); }
 .project:hover .project-img { transform: scale(1.05); }
+/* Зураг ачаалагдаагүй үед хоосон цонх биш, судалтай ягаан дэвсгэр харагдана */
+.project-img-wrap.no-img { background: repeating-linear-gradient(135deg, var(--pink) 0 12px, var(--pink-dark) 12px 24px); }
 .project-num { margin-top: 14px; font-size: 12px; font-weight: 700; color: var(--rose); letter-spacing: .14em; }
 .project h3 { font-family: var(--serif); font-size: 28px; font-weight: 500; line-height: 1.05; margin: 6px 0 8px; }
 .project p { margin: 0 0 12px; color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
@@ -357,9 +359,12 @@ h2 em, h1 em { font-style: italic; color: var(--rose); }
 .content-dark .eyebrow, .content-dark h2 em { color: var(--pink); }
 .lead { font-family: var(--serif); font-size: clamp(22px, 2.4vw, 28px); font-style: italic; max-width: 32ch; line-height: 1.3; margin: 0 0 36px; opacity: .85; }
 .email-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-bottom: 36px; }
+/* Имэйлд sans фонт: serif фонтын "0" нь "o" үсэгтэй андуурагддаг */
 .big-email {
-  font-family: var(--serif);
-  font-size: clamp(28px, 4vw, 56px);
+  font-family: var(--sans);
+  font-weight: 500;
+  letter-spacing: -.01em;
+  font-size: clamp(24px, 3.4vw, 46px);
   text-decoration: none;
   border-bottom: 2px solid var(--pink);
   overflow-wrap: anywhere;
@@ -407,6 +412,18 @@ h2 em, h1 em { font-style: italic; color: var(--rose); }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 :focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; }
+.content:focus { outline: none; } /* JS-ээр фокуслагдах агуулгын хүрээг нуух */
+
+/* JavaScript унтраалттай үед харагдах мэдэгдэл */
+.noscript {
+  position: fixed;
+  inset: auto 16px 16px;
+  padding: 14px 18px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 14px;
+  z-index: 60;
+}
 
 /* ---------- Responsive ---------- */
 

@@ -11,7 +11,6 @@
   --ink-soft: #6d5459;
   --paper: #fbf5f2;         /* доторх цаас */
   --rose: #b4566a;          /* гол онцлох өнгө */
-  --label: #ffffff;
   --soft: #f2c6cc;          /* цаасан дээрх зөөлөн дэвсгэр (tag, зургийн хүрээ) */
   --deep-a: #d9808f;        /* нүүрний зурвасын градиент */
   --deep-b: #7a2c3d;
@@ -133,20 +132,9 @@ body {
 .tab::before { top: -16px;    background: radial-gradient(circle at 100% 0,    transparent 15.5px, var(--pink) 16px); }
 .tab::after  { bottom: -16px; background: radial-gradient(circle at 100% 100%, transparent 15.5px, var(--pink) 16px); }
 
-/* Цагаан шошго — доороос дээш уншигдана */
-.tab-label {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  background: var(--label);
-  padding: 10px 4px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: .02em;
-  white-space: nowrap;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
-  transition: transform .3s;
-}
-.spine:hover .tab-label { transform: rotate(180deg) translateX(3px); }
+/* Хулгана аваачихад хавчуурга бага зэрэг цухуйна (шошгогүй тул дарж болохыг илтгэнэ) */
+.tab { transition: right .3s var(--ease), width .3s var(--ease); }
+.folder:not(.open) .spine:hover .tab { right: -36px; width: 36px; }
 
 /* Нээлттэй хавтасны нуруун дээрх том налуу гарчиг */
 .spine-title {

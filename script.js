@@ -2,7 +2,7 @@
    script.js — Ягаан хавтас портфолио
    1. data.js-ийн мэдээллийг HTML-д оруулах
    2. Хавтас нээх / хаах (дарах, ← → товч, URL #hash)
-   3. Имэйл хуулах, тамга (easter egg)
+   3. Имэйл хуулах, өнгө сонгогч
    ========================================================= */
 
 const data = window.PORTFOLIO;
@@ -188,15 +188,3 @@ swatches.forEach((b) => b.addEventListener("click", () => setTheme(b.dataset.the
 let savedTheme = "pink";
 try { savedTheme = localStorage.getItem("theme") || "pink"; } catch {}
 setTheme(savedTheme, { announce: false });
-
-// Easter egg: тамган дээр 3 дарахад "АЖИЛД АВЪЯ!" тамга дарагдана
-let stickerClicks = 0;
-$("#sticker").addEventListener("click", () => {
-  stickerClicks++;
-  if (stickerClicks === 3) {
-    $("#stamp").classList.add("on");
-    toast("Батлагдлаа! 🎉");
-  } else if (stickerClicks < 3) {
-    toast(`Дахиад ${3 - stickerClicks} удаа…`);
-  }
-});

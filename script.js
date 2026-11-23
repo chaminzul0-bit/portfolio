@@ -92,13 +92,26 @@ const isMobile = () => window.matchMedia("(max-width: 760px)").matches;
 // .content-ийг JavaScript-ээр фокуслах боломжтой болгоно (Tab дараалалд орохгүй)
 folders.forEach((f) => f.querySelector(".content").setAttribute("tabindex", "-1"));
 
+const cabinet = $("#cabinet");
+
+// Бүх хавтсыг хаана: сайт анх ингэж эхэлнэ (зурвасууд дэлгэцийг тэнцүү хуваана)
+function closeAll({ updateUrl = true } = {}) {
+  folders.forEach((f) => {
+    f.classList.remove("open");
+    f.querySelector(".spine").setAttribute("aria-expanded", false);
+  });
+  cabinet.classList.add("all-closed");
+  if (updateUrl && location.hash) history.pushState(null, "", location.pathname + location.search);
+}
+
 // Зөвхөн нэг хавтас нээлттэй байна: бусдаас нь .open-ийг авна
 // focus = true: хэрэглэгч өөрөө нээсэн үед гарын фокусыг шинэ агуулга руу шилжүүлнэ
 function openFolder(id, { updateUrl = true, focus = true } = {}) {
-  if (!ids.includes(id)) id = "home";
+  if (!ids.includes(id)) return closeAll({ updateUrl }); // буруу/хоосон hash → бүгд хаалттай
   const folder = folders[ids.indexOf(id)];
   const alreadyOpen = folder.classList.contains("open");
 
+  cabinet.classList.remove("all-closed");
   folders.forEach((f) => {
     const open = f === folder;
     f.classList.toggle("open", open);
@@ -111,7 +124,7 @@ function openFolder(id, { updateUrl = true, focus = true } = {}) {
   if (focus) content.focus({ preventScroll: true });
 
   // Гар утсан дээр нээгдсэн хавтас руу гүйлгэнэ
-  if (isMobile() && (focus || id !== "home")) {
+  if (isMobile()) {
     setTimeout(() => folder.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
   }
 }
@@ -130,19 +143,21 @@ document.querySelectorAll("[data-open]").forEach((a) =>
   })
 );
 
-// ← → товчоор дараагийн / өмнөх хавтас руу, Esc-ээр нүүр рүү шилжинэ
+// ← → товчоор дараагийн / өмнөх хавтас руу шилжинэ, Esc-ээр бүгдийг хаана
 window.addEventListener("keydown", (e) => {
   if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return; // хөтчийн товчлолд саад болохгүй
   if (e.target instanceof Element && e.target.closest("input, textarea, select")) return;
-  const current = ids.indexOf(document.querySelector(".folder.open").dataset.id);
+  const openEl = document.querySelector(".folder.open");
+  const current = openEl ? ids.indexOf(openEl.dataset.id) : -1; // -1 = бүгд хаалттай
   if (e.key === "ArrowRight" && current < ids.length - 1) openFolder(ids[current + 1]);
   else if (e.key === "ArrowLeft" && current > 0) openFolder(ids[current - 1]);
-  else if (e.key === "Escape" && current !== 0) openFolder("home");
+  else if (e.key === "Escape" && current !== -1) closeAll();
 });
 
-// Хөтчийн "буцах" товч болон шууд холбоос (жишээ нь .../#projects)
+// Хөтчийн "буцах" товч болон шууд холбоос (жишээ нь .../#projects).
+// Hash-гүй орж ирвэл бүх хавтас хаалттай эхэлнэ.
 window.addEventListener("popstate", () => openFolder(location.hash.slice(1), { updateUrl: false, focus: false }));
-openFolder(location.hash.slice(1) || "home", { updateUrl: false, focus: false });
+openFolder(location.hash.slice(1), { updateUrl: false, focus: false });
 
 /* ---------- 3. Жижиг харилцан үйлдлүүд ---------- */
 

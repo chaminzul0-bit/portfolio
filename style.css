@@ -93,6 +93,14 @@ body {
   flex-basis: calc(var(--spine-open) + var(--peek));
 }
 
+/* Бүх хавтас хаалттай (сайт анх ингэж нээгдэнэ): 5 зурвас дэлгэцийг тэнцүү хувааж,
+   постерууд эгнэж зогсож буй мэт харагдана */
+.cabinet.all-closed .folder { flex-grow: 1; }
+.cabinet.all-closed .peek-text { font-size: min(11vh, 104px); bottom: 76px; } /* зөвлөмжийн дээр */
+.cabinet.all-closed .peek-skills .peek-text { font-size: min(5.5vh, 48px); }
+.cabinet.all-closed .peek-contact .peek-text { bottom: 96px; }
+.cabinet.all-closed .peek-tag { font-size: 12px; top: 24px; }
+
 /* ---------- Нуруу ба хавчуурга ---------- */
 .spine {
   position: relative;
@@ -209,6 +217,10 @@ body {
   line-height: 1;
   white-space: nowrap;
   letter-spacing: .01em;
+  /* Урт бичиг дээд талын дугаар руу орохгүй: багтахгүй бол "…"-ээр тасарна */
+  max-height: calc(100% - 140px);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /* Жижиг тэмдэглэгээ: зурвасын дээд талд (сэтгүүлийн дугаар шиг) */
 .peek-tag {
@@ -404,6 +416,29 @@ h2 em, h1 em { font-style: italic; color: var(--rose); }
 .contact-links .value { opacity: .6; overflow-wrap: anywhere; text-align: right; }
 .footer-note { margin-top: 56px; font-size: 13px; opacity: .5; }
 
+/* ---------- "Хавтас сонгоно уу" зөвлөмж (зөвхөн бүгд хаалттай үед) ---------- */
+.closed-hint {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 40;
+  margin: 0;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .88);
+  color: #2b1a1e;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 17px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .18);
+  opacity: 0;
+  translate: 0 12px;
+  pointer-events: none;
+  transition: opacity .4s, translate .4s var(--ease);
+}
+.cabinet.all-closed ~ .closed-hint { opacity: 1; translate: 0 0; animation: nudge 2.4s ease-in-out 1s infinite; }
+@keyframes nudge { 50% { translate: 0 -4px; } }
+
 /* ---------- Өнгө сонгогч ---------- */
 .swatches {
   position: fixed;
@@ -521,12 +556,20 @@ h2 em, h1 em { font-style: italic; color: var(--rose); }
     bottom: auto;
     transform: translateY(-50%);
     font-size: 34px;
+    max-height: none;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .peek-skills .peek-text { font-size: 22px; }
   .peek-tag { display: none; }
   .cabinet { padding-bottom: 72px; } /* сүүлийн хавтас өнгө сонгогчийн доор орохгүй */
+
+  /* Бүгд хаалттай үед зурвасууд өндөр болж дэлгэцийг дүүргэнэ */
+  .cabinet.all-closed .window { height: calc((100dvh - 5 * 44px - 72px) / 5); min-height: 72px; }
+  .cabinet.all-closed .peek-text { font-size: 44px; bottom: auto; }
+  .cabinet.all-closed .peek-skills .peek-text { font-size: 24px; }
+  .cabinet.all-closed .peek-contact .peek-text { bottom: auto; }
+  .closed-hint { font-size: 15px; }
 
   .about-grid { grid-template-columns: 1fr; }
   .photo { max-width: 240px; }
